@@ -381,7 +381,10 @@ def juego():
         global h2
         global nombre
         global d
-        futo.destroy()
+        global r
+        global top
+        global opcion
+        top=True
         if r=="Si":
             if seconds<10:
                 strS="0"+str(seconds)
@@ -399,6 +402,7 @@ def juego():
             string=str(nombre)+";"+strTiempo+";"+str(d)
             file=open("futoshiki2020top10.dat","a")
             file.write(string)
+            file.write("\n")
             file.close()
             file=open("futoshiki2020top10.dat","a")
             file.close()
@@ -428,7 +432,19 @@ def juego():
             file.close()
             file=open("futoshiki2020top10.dat","a")
             file.close()
+        borrar.configure(state="disabled")
+        terminar.configure(state="disabled")
+        erase.configure(state="disabled")
+        topTen.configure(state="disabled")
+        guardar.configure(state="disabled")
+        panel1.configure(state="disabled",bg="white")
+        panel2.configure(state="disabled",bg="white")
+        panel3.configure(state="disabled",bg="white")
+        panel4.configure(state="disabled",bg="white")
+        panel5.configure(state="disabled",bg="white")
+        opcion=""
         messagebox.showinfo("Felicidades", "Ha llenado el tablero completo")
+        top=False
     ###########################
     #Funcionalidad: manejar el reloj de fondo
     def reloj():
@@ -482,7 +498,7 @@ def juego():
             mins=m2
             seconds=s2
             timerT.destroy()
-            timer()
+            reloj()
         #Funcionalidad: cerrar la partida en caso de que quiera
         #terminarla cuando el tiempo se acaba
         def timerS():
@@ -652,7 +668,7 @@ def juego():
             borrar.configure(state="normal")
             terminar.configure(state="normal")
             erase.configure(state="normal")
-            top.configure(state="normal")
+            topTen.configure(state="normal")
             guardar.configure(state="normal")
             cargar.configure(state="disabled")
     if cargada==False:
@@ -948,8 +964,8 @@ def juego():
     terminar.place(x=450,y=700)
     erase=Button(futo,state="disabled",height=2,width=10,text="Borrar\nJuego",activebackground="light blue",bg="light blue",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: borrarG())
     erase.place(x=560,y=700)
-    top=Button(futo,state="disabled",height=2,width=10,text="Top\n10",activebackground="yellow",bg="yellow",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda:top_ten())
-    top.place(x=670,y=700)
+    topTen=Button(futo,state="disabled",height=2,width=10,text="Top\n10",activebackground="yellow",bg="yellow",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda:top_ten())
+    topTen.place(x=670,y=700)
     guardar=Button(futo,state="disabled",height=1,width=15,text="Guardar Partida",activebackground="grey",bg="light grey",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda:guardarP())
     guardar.place(x=817,y=689)
     cargar=Button(futo,height=1,width=15,text="Cargar Partida",activebackground="grey",bg="light grey",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda:cargarP())
@@ -1237,10 +1253,12 @@ def juego():
                     vacio=False
                     for i in range(len(matriz)):
                         for f in range(len(matriz)):
-                            if matriz[i][f]!="":
+                            if matriz[i][f]=="":
                                 vacio=True
                     if vacio==False:
                         win=True
+                    if win==True:
+                        terminado()
     ###########################
     #Creacion de botones
     fila=268
