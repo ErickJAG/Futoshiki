@@ -23,6 +23,7 @@ opcion=""
 ini=False
 cargada=False
 jugadas=[]
+borradas=[]
 lvl=""
 win=False
 top=False
@@ -38,7 +39,7 @@ def helps():
     os.system("manual_de_usuario_futoshiki.PDF")
 #Funcionalidad: abrir una ventana on la info del programa
 def abouts():
-    messagebox.showinfo("Acerca del programa", "Nombre de programa: Futoshiki\nVersion: 3.7.3\nAutor: Erick Astorga Gamboa")
+    messagebox.showinfo("Acerca del programa", "Nombre de programa: FutoshikiV2\nVersion: 3.7.3\nAutor: Erick Astorga Gamboa")
 ayuda=Button(inicio,text="Ayuda",background="orange",activebackground="orange",relief=GROOVE,font=("Trebuchet MS", 17, "bold"),command=lambda:helps())
 ayuda.place(x=102, y=170)
 about=Button(inicio,text="Acerca de",background="orange",activebackground="orange",relief=GROOVE,font=("Trebuchet MS", 17, "bold"),command=lambda:abouts())
@@ -50,6 +51,7 @@ salir.place(x=112, y=290)
 r=""
 d=""
 p=""
+d2=""
 nombre=""
 #No posee entradas especificas
 #Salida: una ventana con la configuracion
@@ -120,7 +122,12 @@ def confi():
     #Funcionalidad: definir la configuracion de dificultad
     def opdificultad(op):
         global d
-        d=op
+        global d2
+        if op=="Multi Nivel":
+            d="Facil"
+            d2=op
+        else:
+            d=op
     #Funcionalidad: definir la configuracion del panel
     def oppanel(op):
         global p
@@ -130,7 +137,7 @@ def confi():
     global p
     configuracion=Tk()
     configuracion.iconbitmap("Metaverse.ico")
-    configuracion.geometry("600x300")
+    configuracion.geometry("600x350")
     configuracion.configure(bg="black")
     configuracion.title("Configuracion")
     configuracion.resizable(0, 0)
@@ -164,6 +171,9 @@ def confi():
     dificultad3=Radiobutton(configuracion,selectcolor="black",activeforeground="green",activebackground="black",fg="green",bg="black",text="Dificil",variable=D,value=3,font=("Trebuchet MS", 17, "bold"))
     dificultad3.configure(command=lambda: opdificultad(dificultad3["text"]))
     dificultad3.place(x=185,y=170)
+    dificultad4=Radiobutton(configuracion,selectcolor="black",activeforeground="green",activebackground="black",fg="green",bg="black",text="Multi Nivel",variable=D,value=4,font=("Trebuchet MS", 17, "bold"))
+    dificultad4.configure(command=lambda: opdificultad(dificultad4["text"]))
+    dificultad4.place(x=185,y=220)
     posicion1=Radiobutton(configuracion,selectcolor="black",activeforeground="green",activebackground="black",fg="green",bg="black",text="Izquierda",variable=P,value=1,font=("Trebuchet MS", 17, "bold"))
     posicion1.configure(command=lambda: oppanel(posicion1["text"]))
     posicion1.place(x=350,y=100)
@@ -171,7 +181,7 @@ def confi():
     posicion2.configure(command=lambda: oppanel(posicion2["text"]))
     posicion2.place(x=350,y=150)
     confirmar=Button(configuracion,text="Confirmar",background="green",activebackground="green",relief=GROOVE,font=("Trebuchet MS", 17, "bold"),command=lambda: salirConfi())
-    confirmar.place(x=235,y=230)
+    confirmar.place(x=235,y=280)
     configuracion.mainloop()
 conf=Button(inicio,text="Configuracion",background="green",activebackground="green",relief=GROOVE,font=("Trebuchet MS", 17, "bold"),command=lambda: confi())
 conf.place(x=60, y=110)
@@ -232,11 +242,13 @@ def juego():
     global r
     global p
     global d
+    global d2
     global seconds
     global mins
     global hours
     global nombre
     global jugadas
+    global borradas
     global lvl
     global s2
     global m2
@@ -269,10 +281,13 @@ def juego():
             matriz=[["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]]
             matriz2=[["","","",""],["","","",""],["","","",""],["","","",""],["","","",""]]
             matriz3=[["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]]
-            nombre=""
-            seconds=0
-            mins=0
-            hours=0
+            if d2=="Multi Nivel" and d!="Facil":
+                pass
+            else:
+                nombre=""
+                seconds=0
+                mins=0
+                hours=0
         strs=str(seconds)
         strm=str(mins)
         strh=str(hours)
@@ -291,10 +306,13 @@ def juego():
             matriz=[["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]]
             matriz2=[["","","",""],["","","",""],["","","",""],["","","",""],["","","",""]]
             matriz3=[["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]]
-            nombre=""
-            seconds=s2
-            mins=m2
-            hours=h2
+            if d2=="Multi Nivel" and d!="Facil":
+                pass
+            else:
+                nombre=""
+                seconds=s2
+                mins=m2
+                hours=h2
         strs=str(seconds)
         strm=str(mins)
         strh=str(hours)
@@ -381,6 +399,7 @@ def juego():
         global h2
         global nombre
         global d
+        global d2
         global r
         global top
         global opcion
@@ -425,7 +444,10 @@ def juego():
                 strM=str(mins)
             strH="0"+str(hours)
             strTiempo=strH+":"+strM+":"+strS
-            string=str(nombre)+";"+strTiempo+";"+str(d)
+            if d2=="Multi Nivel":
+                string=str(nombre)+";"+strTiempo+";"+str(d2)
+            else:
+                string=str(nombre)+";"+strTiempo+";"+str(d)
             file=open("futoshiki2020top10.dat","a")
             file.write(string)
             file.write("\n")
@@ -433,6 +455,7 @@ def juego():
             file=open("futoshiki2020top10.dat","a")
             file.close()
         borrar.configure(state="disabled")
+        redo.configure(state="disabled")
         terminar.configure(state="disabled")
         erase.configure(state="disabled")
         topTen.configure(state="disabled")
@@ -443,8 +466,23 @@ def juego():
         panel4.configure(state="disabled",bg="white")
         panel5.configure(state="disabled",bg="white")
         opcion=""
-        messagebox.showinfo("Felicidades", "Ha llenado el tablero completo")
+        if d2=="Multi Nivel":
+            messagebox.showinfo("Felicidades", "Ha terminado todas las dificultades")
+        else:
+            messagebox.showinfo("Felicidades", "Ha llenado el tablero completo")
         top=False
+    ###########################
+    #Funcionalidad: cargar la siguiente dificultad
+    def nextLevel():
+        global d
+        string="Nivel "+d+" completado\nEmpezando siguiente nivel"
+        if d=="Facil":
+            d="Normal"
+        else:
+            d="Dificil"
+        futo.destroy()
+        messagebox.showinfo("Felicidades", string)
+        juego()
     ###########################
     #Funcionalidad: manejar el reloj de fondo
     def reloj():
@@ -666,14 +704,20 @@ def juego():
             ini=True
             start.configure(state="disabled")
             borrar.configure(state="normal")
+            redo.configure(state="normal")
             terminar.configure(state="normal")
             erase.configure(state="normal")
             topTen.configure(state="normal")
             guardar.configure(state="normal")
             cargar.configure(state="disabled")
     if cargada==False:
-        name=Entry(futo,font=("Trebuchet MS", 12, "bold"))
-        name.place(x=488,y=90)
+        if d2=="Multi Nivel":
+            if d=="Facil":
+                name=Entry(futo,font=("Trebuchet MS", 12, "bold"))
+                name.place(x=488,y=90)
+        else:
+            name=Entry(futo,font=("Trebuchet MS", 12, "bold"))
+            name.place(x=488,y=90)
     ###########################
     #Funcionalidad: definir el nombre y verificar que el nombre dado
     #cumpla con las restricciones
@@ -695,17 +739,38 @@ def juego():
     def borrarJ():
         global matriz
         global jugadas
+        global borradas
         if jugadas==[]:
             messagebox.showinfo("Alto", "No hay jugadas que borrar")
         else:
             fila=int(jugadas[0][0])
             columna=int(jugadas[0][1])
+            jBorrada=(str(fila),str(columna),matriz[fila][columna])
+            borradas=[jBorrada]+borradas
             matriz[fila][columna]=""
             for i in range(len(matriz)):
                 for f in range(len(matriz)):
                     boton=listaB[i][f]
                     boton.configure(text=matriz[f][i])
             jugadas=jugadas[1:]
+    ###########################
+    #Funcionalidad: rehacer la ultima jugada realizada
+    def rehacerJ():
+        global matriz
+        global jugadas
+        global borradas
+        if borradas==[]:
+            messagebox.showinfo("Alto", "No hay jugadas que rehacer")
+        else:
+            fila=int(borradas[0][0])
+            columna=int(borradas[0][1])
+            jugadas=[(fila,columna)]+jugadas
+            matriz[fila][columna]=borradas[0][2]
+            for i in range(len(matriz)):
+                for f in range(len(matriz)):
+                    boton=listaB[i][f]
+                    boton.configure(text=matriz[f][i])
+            borradas=borradas[1:]
     ###########################
     #Funcionalidad: borrar el juego entero
     def borrarG():
@@ -948,20 +1013,35 @@ def juego():
             column=column+30
     ###########################
     if cargada==False:
-        Label(futo,text="Nombre:",bg="black",fg="white",font=("Trebuchet MS", 12, "bold")).place(x=392,y=90)
-        aceptarN=Button(futo,text="Aceptar",relief=RAISED,bg="red",activebackground="red",command=lambda:definirN())
-        aceptarN.place(x=700,y=90)
+        if d2=="Multi Nivel":
+            if d=="Facil":
+                Label(futo,text="Nombre:",bg="black",fg="white",font=("Trebuchet MS", 12, "bold")).place(x=392,y=90)
+                aceptarN=Button(futo,text="Aceptar",relief=RAISED,bg="red",activebackground="red",command=lambda:definirN())
+                aceptarN.place(x=700,y=90)
+            else:
+                Label(futo,text="Nombre:",bg="black",fg="white",font=("Trebuchet MS", 12, "bold")).place(x=392,y=90)
+                nombres=Label(futo,text=nombre,bg="black",fg="white",font=("Trebuchet MS", 12, "bold"))
+                nombres.place(x=480,y=90)
+        else:
+            Label(futo,text="Nombre:",bg="black",fg="white",font=("Trebuchet MS", 12, "bold")).place(x=392,y=90)
+            aceptarN=Button(futo,text="Aceptar",relief=RAISED,bg="red",activebackground="red",command=lambda:definirN())
+            aceptarN.place(x=700,y=90)
     else:
         Label(futo,text="Nombre:",bg="black",fg="white",font=("Trebuchet MS", 12, "bold")).place(x=392,y=90)
         nombres=Label(futo,text=nombre,bg="black",fg="white",font=("Trebuchet MS", 12, "bold"))
         nombres.place(x=480,y=90)
     #Botones del tablero de juego
     Label(futo,text="FUTOSHIKI",bg="red",relief=RAISED,font=("Trebuchet MS", 30, "bold italic")).place(x=397,y=15)
-    Label(futo,text=str(d),bg="red",relief=RAISED,font=("Trebuchet MS", 15, "bold italic")).place(x=620,y=25)
+    if d2=="Multi Nivel":
+        Label(futo,text=str(d2)+" "+str(d),bg="red",relief=RAISED,font=("Trebuchet MS", 15, "bold italic")).place(x=620,y=25)
+    else:
+        Label(futo,text=str(d),bg="red",relief=RAISED,font=("Trebuchet MS", 15, "bold italic")).place(x=620,y=25)
     borrar=Button(futo,state="disabled",height=2,width=10,text="Borrar\nJugada",activebackground="turquoise",bg="turquoise",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: borrarJ())
     borrar.place(x=340,y=700)
-    terminar=Button(futo,state="disabled",height=2,width=10,text="Terminar\nJuego",activebackground="green",bg="green",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: finishG())
-    terminar.place(x=450,y=700)
+    redo=Button(futo,state="disabled",height=2,width=10,text="Rehacer\nJugada",activebackground="green",bg="green",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: rehacerJ())
+    redo.place(x=450,y=700)
+    terminar=Button(futo,state="disabled",height=2,width=10,text="Terminar\nJuego",activebackground="red",bg="red",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: finishG())
+    terminar.place(x=268,y=60)
     erase=Button(futo,state="disabled",height=2,width=10,text="Borrar\nJuego",activebackground="light blue",bg="light blue",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: borrarG())
     erase.place(x=560,y=700)
     topTen=Button(futo,state="disabled",height=2,width=10,text="Top\n10",activebackground="yellow",bg="yellow",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda:top_ten())
@@ -982,6 +1062,8 @@ def juego():
         global matriz
         global matriz2
         global matriz3
+        global d
+        global d2
         if opcion=="":
             pass
         else:
@@ -1258,7 +1340,13 @@ def juego():
                     if vacio==False:
                         win=True
                     if win==True:
-                        terminado()
+                        if d2=="Multi Nivel":
+                            if d=="Dificil":
+                                terminado()
+                            else:
+                                nextLevel()
+                        else:
+                            terminado()
     ###########################
     #Creacion de botones
     fila=268
