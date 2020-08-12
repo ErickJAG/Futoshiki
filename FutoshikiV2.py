@@ -4,6 +4,12 @@ import ast
 import random
 from tkinter import messagebox
 import os
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import landscape
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+
 
 inicio=Tk()
 inicio.geometry("300x400")
@@ -257,7 +263,7 @@ def juego():
     futo=Tk()
     futo.geometry("1000x800")
     futo.resizable(0, 0)
-    futo.title("Futoshiki")
+    futo.title("FutoshikiV2")
     futo.iconbitmap("Metaverse.ico")
     futo.configure(bg="black")
     level=[0,1,2]
@@ -844,17 +850,17 @@ def juego():
         for i in range(len(l)):
             tiemp=list(l[i])
             if tiemp[0]=="0":
-                suma=suma+(int(tiemp[1])*100)
+                suma=suma+((int(tiemp[1]))*100)
             else:
-                suma=suma+(((int(tiemp[0])*10)+int(tiemp[1]))*100)
+                suma=suma+((int(tiemp[0])*100)+(int(tiemp[1]))*100)
             if tiemp[3]=="0":
                 suma=suma+(int(tiemp[4])*10)
             else:
-                suma=suma+(((int(tiemp[3])*10)+int(tiemp[4]))*10)
+                suma=suma+((int(tiemp[3])*10)+(int(tiemp[4]))*10)
             if tiemp[6]=="0":
                 suma=suma+int(tiemp[7])
             else:
-                suma=suma+((int(tiemp[6])*10)+int(tiemp[7]))
+                suma=suma+(int(tiemp[6])+int(tiemp[7]))
             result=result+[suma]
             suma=0
         return result
@@ -918,14 +924,78 @@ def juego():
         while sumas!=[]:
             s=""
             for i in range(len(sumas)):
-                if sumas[i]==max(sumas):
+                if sumas[i]==min(sumas):
                     s=i
             if len(result)<10:
-                result=result+[(nombres[i],tiempos[i])]
-            del nombres[i]
-            del tiempos[i]
-            del sumas[i]
+                result=result+[(nombres[s],tiempos[s])]
+            del nombres[s]
+            del tiempos[s]
+            del sumas[s]
         return result
+    ###########################
+    #Funcionalidad: crear el pdf del top 10
+    def pdf(TOPF, TOPN, TOPD, TOPM):
+        global nombre
+        nombrepdf=nombre+" Top10.pdf"
+        pdfmetrics.registerFont(TTFont('GOTHIC', 'GOTHIC.ttf'))
+        pdfmetrics.registerFont(TTFont('GOTHICB', 'GOTHICB.ttf'))
+        c=canvas.Canvas(nombrepdf,pagesize=(810, 500))
+        c.setFont("GOTHICB", 40, leading=None)
+        c.drawString(225, 450, "Top 10 FutoshikiV2")
+        c.setFont("GOTHICB", 30, leading=None)
+        c.drawString(70, 380, "Facil")
+        c.drawString(250, 380, "Normal")
+        c.drawString(465, 380, "Dificil")
+        c.drawString(630, 380, "Multi Nivel")
+        c.setFont("GOTHICB", 20, leading=None)
+        c.drawString(20, 350, "Nombre")
+        c.drawString(220, 350, "Nombre")
+        c.drawString(420, 350, "Nombre")
+        c.drawString(620, 350, "Nombre")
+        c.drawString(120, 350, "Tiempo")
+        c.drawString(320, 350, "Tiempo")
+        c.drawString(520, 350, "Tiempo")
+        c.drawString(720, 350, "Tiempo")
+        c.setFont("GOTHIC", 12, leading=None)
+        columna=320
+        n=1
+        for i in TOPF:
+            string1=str(n)+". "+str(i[0])
+            string2=i[1]
+            c.drawString(20, columna, string1)
+            c.drawString(120, columna, string2)
+            columna=columna-20
+            n=n+1
+        columna=320
+        n=1
+        for i in TOPN:
+            string1=str(n)+". "+str(i[0])
+            string2=i[1]
+            c.drawString(220, columna, string1)
+            c.drawString(320, columna, string2)
+            columna=columna-20
+            n=n+1
+        columna=320
+        n=1
+        for i in TOPD:
+            string1=str(n)+". "+str(i[0])
+            string2=i[1]
+            c.drawString(420, columna, string1)
+            c.drawString(520, columna, string2)
+            columna=columna-20
+            n=n+1
+        columna=320
+        n=1
+        for i in TOPM:
+            string1=str(n)+". "+str(i[0])
+            string2=i[1]
+            c.drawString(620, columna, string1)
+            c.drawString(720, columna, string2)
+            columna=columna-20
+            n=n+1
+        c.showPage()
+        c.save()
+        messagebox.showinfo("Listo", "Se ha creado una tabla\ncon el top 10 para visualizar\n \nEn caso de querer imprimirla\nun PDF ha sido creado con su\nnombre en la carpeta del programa")
     ###########################
     #Funcionalidad: crear la ventana de top 10 jugadores de
     #cada dificultad
@@ -947,6 +1017,8 @@ def juego():
         listaTN=[]
         listaND=[]
         listaTD=[]
+        listaNM=[]
+        listaTM=[]
         file=open("futoshiki2020top10.dat","r")
         contenido=file.readlines()
         for z in range (0,len(contenido),1):
@@ -962,34 +1034,42 @@ def juego():
             elif valor3=="Normal":
                 listaNN=listaNN+[valor1]
                 listaTN=listaTN+[valor2]
-            else:
+            elif valor3=="Dificil":
                 listaND=listaND+[valor1]
                 listaTD=listaTD+[valor2]
+            else:
+                listaNM=listaNM+[valor1]
+                listaTM=listaTM+[valor2]
         file.close()
         top=True
         tiemposF=calc_tiempo(listaTF)
         tiemposN=calc_tiempo(listaTN)
         tiemposD=calc_tiempo(listaTD)
+        tiemposM=calc_tiempo(listaTM)
         TOPF=ordenTop(listaNF,listaTF,tiemposF)
         TOPN=ordenTop(listaNN,listaTN,tiemposN)
         TOPD=ordenTop(listaND,listaTD,tiemposD)
+        TOPM=ordenTop(listaNM,listaTM,tiemposM)
         topt=Tk()
-        topt.geometry("600x500")
+        topt.geometry("820x500")
         topt.iconbitmap("Metaverse.ico")
         topt.configure(bg="black")
         topt.title("Top 10")
         topt.resizable(0, 0)
         botonSalir=Button(topt,text="Salir",bg="grey",activebackground="grey",relief=RAISED,font=("Trebuchet MS", 18, "bold"),command=lambda:salirTop())
-        botonSalir.place(x=265,y=420)
+        botonSalir.place(x=375,y=420)
         Label(topt,text="Top 10 Facil",fg="green",bg="black",font=("Trebuchet MS", 17, "bold")).place(x=50,y=20)
         Label(topt,text="Top 10 Normal",fg="green",bg="black",font=("Trebuchet MS", 17, "bold")).place(x=215,y=20)
         Label(topt,text="Top 10 Dificil",fg="green",bg="black",font=("Trebuchet MS", 17, "bold")).place(x=400,y=20)
+        Label(topt,text="Top 10 Multi Nivel",fg="green",bg="black",font=("Trebuchet MS", 17, "bold")).place(x=585,y=20)
         Label(topt,text="Tiempo",fg="green",bg="black",font=("Trebuchet MS", 10, "bold")).place(x=130,y=50)
         Label(topt,text="Tiempo",fg="green",bg="black",font=("Trebuchet MS", 10, "bold")).place(x=290,y=50)
         Label(topt,text="Tiempo",fg="green",bg="black",font=("Trebuchet MS", 10, "bold")).place(x=480,y=50)
+        Label(topt,text="Tiempo",fg="green",bg="black",font=("Trebuchet MS", 10, "bold")).place(x=670,y=50)
         Label(topt,text="Nombre",fg="green",bg="black",font=("Trebuchet MS", 10, "bold")).place(x=50,y=50)
         Label(topt,text="Nombre",fg="green",bg="black",font=("Trebuchet MS", 10, "bold")).place(x=215,y=50)
         Label(topt,text="Nombre",fg="green",bg="black",font=("Trebuchet MS", 10, "bold")).place(x=400,y=50)
+        Label(topt,text="Nombre",fg="green",bg="black",font=("Trebuchet MS", 10, "bold")).place(x=585,y=50)
         column=80
         for i in TOPF:
             string1=str(i[0])
@@ -1011,6 +1091,14 @@ def juego():
             Label(topt,text=string1,fg="green",bg="black",font=("Trebuchet MS", 10, "bold")).place(x=400,y=column)
             Label(topt,text=string2,fg="green",bg="black",font=("Trebuchet MS", 10, "bold")).place(x=480,y=column)
             column=column+30
+        column=80
+        for i in TOPM:
+            string1=str(i[0])
+            string2=str(i[1])
+            Label(topt,text=string1,fg="green",bg="black",font=("Trebuchet MS", 10, "bold")).place(x=585,y=column)
+            Label(topt,text=string2,fg="green",bg="black",font=("Trebuchet MS", 10, "bold")).place(x=670,y=column)
+            column=column+30
+        pdf(TOPF, TOPN, TOPD, TOPM)
     ###########################
     if cargada==False:
         if d2=="Multi Nivel":
