@@ -216,30 +216,42 @@ def juego():
                 panel3.configure(bg="white")
                 panel4.configure(bg="white")
                 panel5.configure(bg="white")
+                analizar.configure(bg="white")
             elif op==panel2["text"]:
                 panel1.configure(bg="white")
                 panel2.configure(bg="green")
                 panel3.configure(bg="white")
                 panel4.configure(bg="white")
                 panel5.configure(bg="white")
+                analizar.configure(bg="white")
             elif op==panel3["text"]:
                 panel1.configure(bg="white")
                 panel2.configure(bg="white")
                 panel3.configure(bg="green")
                 panel4.configure(bg="white")
                 panel5.configure(bg="white")
+                analizar.configure(bg="white")
             elif op==panel4["text"]:
                 panel1.configure(bg="white")
                 panel2.configure(bg="white")
                 panel3.configure(bg="white")
                 panel4.configure(bg="green")
                 panel5.configure(bg="white")
-            else:
+                analizar.configure(bg="white")
+            elif op==panel5["text"]:
                 panel1.configure(bg="white")
                 panel2.configure(bg="white")
                 panel3.configure(bg="white")
                 panel4.configure(bg="white")
                 panel5.configure(bg="green")
+                analizar.configure(bg="white")
+            else:
+                panel1.configure(bg="white")
+                panel2.configure(bg="white")
+                panel3.configure(bg="white")
+                panel4.configure(bg="white")
+                panel5.configure(bg="white")
+                analizar.configure(bg="green")
     ###########################
     if cargada==False:
         matriz=[["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]]
@@ -364,35 +376,41 @@ def juego():
     if p=="Izquierda":
         panel1=Button(futo,height=2,width=6,text="1",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel1.configure(command=lambda: elejirOp(panel1["text"]))
-        panel1.place(x=100,y=100)
+        panel1.place(x=100,y=70)
         panel2=Button(futo,height=2,width=6,text="2",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel2.configure(command=lambda: elejirOp(panel2["text"]))
-        panel2.place(x=100,y=200)
+        panel2.place(x=100,y=170)
         panel3=Button(futo,height=2,width=6,text="3",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel3.configure(command=lambda: elejirOp(panel3["text"]))
-        panel3.place(x=100,y=300)
+        panel3.place(x=100,y=270)
         panel4=Button(futo,height=2,width=6,text="4",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel4.configure(command=lambda: elejirOp(panel4["text"]))
-        panel4.place(x=100,y=400)
+        panel4.place(x=100,y=370)
         panel5=Button(futo,height=2,width=6,text="5",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel5.configure(command=lambda: elejirOp(panel5["text"]))
-        panel5.place(x=100,y=500)
+        panel5.place(x=100,y=470)
+        analizar=Button(futo,height=2,width=6,text="Analizar",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+        analizar.configure(command=lambda: elejirOp(analizar["text"]))
+        analizar.place(x=100,y=570)
     else:
         panel1=Button(futo,height=2,width=6,text="1",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel1.configure(command=lambda: elejirOp(panel1["text"]))
-        panel1.place(x=830,y=100)
+        panel1.place(x=830,y=70)
         panel2=Button(futo,height=2,width=6,text="2",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel2.configure(command=lambda: elejirOp(panel2["text"]))
-        panel2.place(x=830,y=200)
+        panel2.place(x=830,y=170)
         panel3=Button(futo,height=2,width=6,text="3",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel3.configure(command=lambda: elejirOp(panel3["text"]))
-        panel3.place(x=830,y=300)
+        panel3.place(x=830,y=270)
         panel4=Button(futo,height=2,width=6,text="4",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel4.configure(command=lambda: elejirOp(panel4["text"]))
-        panel4.place(x=830,y=400)
+        panel4.place(x=830,y=370)
         panel5=Button(futo,height=2,width=6,text="5",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel5.configure(command=lambda: elejirOp(panel5["text"]))
-        panel5.place(x=830,y=500)
+        panel5.place(x=830,y=470)
+        analizar=Button(futo,height=2,width=6,text="Analizar",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+        analizar.configure(command=lambda: elejirOp(analizar["text"]))
+        analizar.place(x=830,y=570)
     ###########################
     #Funcionalidad: registrar la partida en caso de que se complete
     #con exito
@@ -1152,175 +1170,136 @@ def juego():
         global matriz3
         global d
         global d2
+        options=[]
+        availableP=[]
         if opcion=="":
             pass
         else:
+            if opcion=="Analizar":
+                options=[1,2,3,4,5]
+            else:
+                options=[int(opcion)]
             if boton["text"]!="":
                 pass
             else:
-                check=int(opcion)
-                columna=0
-                fila=0
-                for i in range(len(matriz)):
-                    for f in range(len(matriz[i])):
-                        if boton==listaB[i][f]:
-                            columna=i
-                            fila=f
-                        else:
+                for num in options:
+                    check=num
+                    columna=0
+                    fila=0
+                    for i in range(len(matriz)):
+                        for f in range(len(matriz[i])):
+                            if boton==listaB[i][f]:
+                                columna=i
+                                fila=f
+                            else:
+                                pass
+                    repeatF=False
+                    repeatC=False
+                    for i in range(len(matriz)):
+                        if i==columna:
                             pass
-                repeatF=False
-                repeatC=False
-                for i in range(len(matriz)):
-                    if i==columna:
-                        pass
-                    elif str(matriz[fila][i])==opcion:
-                        repeatF=True
-                for i in range(len(matriz)):
-                    if i==fila:
-                        pass
-                    elif str(matriz[i][columna])==opcion:
-                        repeatC=True
-                checkMF=False
-                checkMC=False
-                errorv=""
-                ###########################
-                #Validaciones de las esquinas
-                if fila==0 and columna==0:
-                    valid=matriz2[0][0]
-                    if matriz[0][1]!="":
-                        if valid==">":
-                            if check<int(matriz[0][1]):
-                                checkMF=True
-                                errorv="mayor"
-                        elif valid=="<":
-                            if check>int(matriz[0][1]):
-                                checkMF=True
-                                errorv="menor"
-                    valid=matriz3[0][0]
-                    if matriz[1][0]!="":
-                        if valid=="^":
-                            if check>int(matriz[1][0]):
-                                checkMC=True
-                                errorv="menor"
-                        elif valid=="v":
-                            if check<int(matriz[1][0]):
-                                checkMC=True
-                                errorv="mayor"
-                ###########################
-                elif fila==0 and columna==4:
-                    valid=matriz2[0][3]
-                    if matriz[0][3]!="":
-                        if valid==">":
-                            if check>int(matriz[0][3]):
-                                checkMF=True
-                                errorv="menor"
-                        elif valid=="<":
-                            if check<int(matriz[0][3]):
-                                checkMF=True
-                                errorv="mayor"
-                    valid=matriz3[0][4]
-                    if matriz[1][4]!="":
-                        if valid=="^":
-                            if check>int(matriz[1][4]):
-                                checkMC=True
-                                errorv="menor"
-                        elif valid=="v":
-                            if check<int(matriz[1][4]):
-                                checkMC=True
-                                errorv="mayor"
-                ###########################
-                elif fila==4 and columna==0:
-                    valid=matriz2[4][0]
-                    if matriz[4][1]!="":
-                        if valid==">":
-                            if check<int(matriz[4][1]):
-                                checkMF=True
-                                errorv="mayor"
-                        elif valid=="<":
-                            if check>int(matriz[4][1]):
-                                checkMF=True
-                                errorv="menor"
-                    valid=matriz3[3][0]
-                    if matriz[3][0]!="":
-                        if valid=="^":
-                            if check<int(matriz[3][0]):
-                                checkMC=True
-                                errorv="mayor"
-                        elif valid=="v":
-                            if check>int(matriz[3][0]):
-                                checkMC=True
-                                errorv="menor"
-                ###########################
-                elif fila==4 and columna==4:
-                    valid=matriz2[4][3]
-                    if matriz[4][3]!="":
-                        if valid==">":
-                            if check>int(matriz[4][3]):
-                                checkMF=True
-                                errorv="menor"
-                        elif valid=="<":
-                            if check<int(matriz[4][3]):
-                                checkMF=True
-                                errorv="mayor"
-                    valid=matriz3[3][4]
-                    if matriz[3][4]!="":
-                        if valid=="^":
-                            if check<int(matriz[3][4]):
-                                checkMC=True
-                                errorv="mayor"
-                        elif valid=="v":
-                            if check>int(matriz[3][4]):
-                                checkMC=True
-                                errorv="menor"
-                ###########################
-                #Validaciones de la primera y ultima fila
-                elif fila==0 or fila==4:
-                    valid=matriz2[fila][columna]
-                    if matriz[fila][columna+1]!="":
-                        if valid==">":
-                            if check<int(matriz[fila][columna+1]):
-                                checkMF=True
-                                errorv="mayor"
-                        elif valid=="<":
-                            if check>int(matriz[fila][columna+1]):
-                                checkMF=True
-                                errorv="menor"
-                    valid=matriz2[fila][columna-1]
-                    if matriz[fila][columna-1]!="":
-                        if valid==">":
-                            if check>int(matriz[fila][columna-1]):
-                                checkMF=True
-                                errorv="menor"
-                        elif valid=="<":
-                            if check<int(matriz[fila][columna-1]):
-                                checkMF=True
-                                errorv="maoyr"
-                    if fila==0:
-                        valid=matriz3[fila][columna]
-                        if matriz[fila+1][columna]!="":
+                        elif str(matriz[fila][i])==str(check):
+                            repeatF=True
+                    for i in range(len(matriz)):
+                        if i==fila:
+                            pass
+                        elif str(matriz[i][columna])==str(check):
+                            repeatC=True
+                    checkMF=False
+                    checkMC=False
+                    errorv=""
+                    ###########################
+                    #Validaciones de las esquinas
+                    if fila==0 and columna==0:
+                        valid=matriz2[0][0]
+                        if matriz[0][1]!="":
+                            if valid==">":
+                                if check<int(matriz[0][1]):
+                                    checkMF=True
+                                    errorv="mayor"
+                            elif valid=="<":
+                                if check>int(matriz[0][1]):
+                                    checkMF=True
+                                    errorv="menor"
+                        valid=matriz3[0][0]
+                        if matriz[1][0]!="":
                             if valid=="^":
-                                if check>int(matriz[fila+1][columna]):
+                                if check>int(matriz[1][0]):
                                     checkMC=True
                                     errorv="menor"
                             elif valid=="v":
-                                if check<int(matriz[fila+1][columna]):
+                                if check<int(matriz[1][0]):
                                     checkMC=True
                                     errorv="mayor"
-                    else:
-                        valid=matriz3[fila-1][columna]
-                        if matriz[fila-1][columna]!="":
+                    ###########################
+                    elif fila==0 and columna==4:
+                        valid=matriz2[0][3]
+                        if matriz[0][3]!="":
+                            if valid==">":
+                                if check>int(matriz[0][3]):
+                                    checkMF=True
+                                    errorv="menor"
+                            elif valid=="<":
+                                if check<int(matriz[0][3]):
+                                    checkMF=True
+                                    errorv="mayor"
+                        valid=matriz3[0][4]
+                        if matriz[1][4]!="":
                             if valid=="^":
-                                if check<int(matriz[fila-1][columna]):
+                                if check>int(matriz[1][4]):
+                                    checkMC=True
+                                    errorv="menor"
+                            elif valid=="v":
+                                if check<int(matriz[1][4]):
+                                    checkMC=True
+                                    errorv="mayor"
+                    ###########################
+                    elif fila==4 and columna==0:
+                        valid=matriz2[4][0]
+                        if matriz[4][1]!="":
+                            if valid==">":
+                                if check<int(matriz[4][1]):
+                                    checkMF=True
+                                    errorv="mayor"
+                            elif valid=="<":
+                                if check>int(matriz[4][1]):
+                                    checkMF=True
+                                    errorv="menor"
+                        valid=matriz3[3][0]
+                        if matriz[3][0]!="":
+                            if valid=="^":
+                                if check<int(matriz[3][0]):
                                     checkMC=True
                                     errorv="mayor"
                             elif valid=="v":
-                                if check>int(matriz[fila-1][columna]):
+                                if check>int(matriz[3][0]):
                                     checkMC=True
                                     errorv="menor"
-                ###########################
-                #Validacion de la primera y ultima columna
-                elif columna==0 or columna==4:
-                    if columna==0:
+                    ###########################
+                    elif fila==4 and columna==4:
+                        valid=matriz2[4][3]
+                        if matriz[4][3]!="":
+                            if valid==">":
+                                if check>int(matriz[4][3]):
+                                    checkMF=True
+                                    errorv="menor"
+                            elif valid=="<":
+                                if check<int(matriz[4][3]):
+                                    checkMF=True
+                                    errorv="mayor"
+                        valid=matriz3[3][4]
+                        if matriz[3][4]!="":
+                            if valid=="^":
+                                if check<int(matriz[3][4]):
+                                    checkMC=True
+                                    errorv="mayor"
+                            elif valid=="v":
+                                if check>int(matriz[3][4]):
+                                    checkMC=True
+                                    errorv="menor"
+                    ###########################
+                    #Validaciones de la primera y ultima fila
+                    elif fila==0 or fila==4:
                         valid=matriz2[fila][columna]
                         if matriz[fila][columna+1]!="":
                             if valid==">":
@@ -1331,110 +1310,172 @@ def juego():
                                 if check>int(matriz[fila][columna+1]):
                                     checkMF=True
                                     errorv="menor"
-                    else:
                         valid=matriz2[fila][columna-1]
                         if matriz[fila][columna-1]!="":
                             if valid==">":
                                 if check>int(matriz[fila][columna-1]):
                                     checkMF=True
-                                    errorv="mayor"
+                                    errorv="menor"
                             elif valid=="<":
                                 if check<int(matriz[fila][columna-1]):
                                     checkMF=True
+                                    errorv="maoyr"
+                        if fila==0:
+                            valid=matriz3[fila][columna]
+                            if matriz[fila+1][columna]!="":
+                                if valid=="^":
+                                    if check>int(matriz[fila+1][columna]):
+                                        checkMC=True
+                                        errorv="menor"
+                                elif valid=="v":
+                                    if check<int(matriz[fila+1][columna]):
+                                        checkMC=True
+                                        errorv="mayor"
+                        else:
+                            valid=matriz3[fila-1][columna]
+                            if matriz[fila-1][columna]!="":
+                                if valid=="^":
+                                    if check<int(matriz[fila-1][columna]):
+                                        checkMC=True
+                                        errorv="mayor"
+                                elif valid=="v":
+                                    if check>int(matriz[fila-1][columna]):
+                                        checkMC=True
+                                        errorv="menor"
+                    ###########################
+                    #Validacion de la primera y ultima columna
+                    elif columna==0 or columna==4:
+                        if columna==0:
+                            valid=matriz2[fila][columna]
+                            if matriz[fila][columna+1]!="":
+                                if valid==">":
+                                    if check<int(matriz[fila][columna+1]):
+                                        checkMF=True
+                                        errorv="mayor"
+                                elif valid=="<":
+                                    if check>int(matriz[fila][columna+1]):
+                                        checkMF=True
+                                        errorv="menor"
+                        else:
+                            valid=matriz2[fila][columna-1]
+                            if matriz[fila][columna-1]!="":
+                                if valid==">":
+                                    if check>int(matriz[fila][columna-1]):
+                                        checkMF=True
+                                        errorv="mayor"
+                                elif valid=="<":
+                                    if check<int(matriz[fila][columna-1]):
+                                        checkMF=True
+                                        errorv="menor"
+                        valid=matriz3[fila][columna]
+                        if matriz[fila+1][columna]!="":
+                            if valid=="^":
+                                if check>int(matriz[fila+1][columna]):
+                                    checkMC=True
                                     errorv="menor"
-                    valid=matriz3[fila][columna]
-                    if matriz[fila+1][columna]!="":
-                        if valid=="^":
-                            if check>int(matriz[fila+1][columna]):
-                                checkMC=True
-                                errorv="menor"
-                        elif valid=="v":
-                            if check<int(matriz[fila+1][columna]):
-                                checkMF=True
-                                errorv="mayor"
-                    valid=matriz3[fila-1][columna]
-                    if matriz[fila-1][columna]!="":
-                        if valid=="^":
-                            if check<int(matriz[fila-1][columna]):
-                                checkMC=True
-                                errorv="mayor"
-                        elif valid=="v":
-                            if check>int(matriz[fila-1][columna]):
-                                checkMF=True
-                                errorv="menor"
-                ###########################
-                #Validacion del resto del tablero
-                else:
-                    valid=matriz2[fila][columna]
-                    if matriz[fila][columna+1]!="":
-                        if valid==">":
-                            if check<int(matriz[fila][columna+1]):
-                                checkMF=True
-                                errorv="mayor"
-                        elif valid=="<":
-                            if check>int(matriz[fila][columna+1]):
-                                checkMF=True
-                                errorv="menor"
-                    valid=matriz2[fila][columna-1]
-                    if matriz[fila][columna-1]!="":
-                        if valid==">":
-                            if check>int(matriz[fila][columna-1]):
-                                checkMF=True
-                                errorv="menor"
-                        elif valid=="<":
-                            if check<int(matriz[fila][columna-1]):
-                                checkMF=True
-                                errorv="mayor"
-                    valid=matriz3[fila][columna]
-                    if matriz[fila+1][columna]!="":
-                        if valid=="^":
-                            if check>int(matriz[fila+1][columna]):
-                                checkMC=True
-                                errorv="menor"
-                        elif valid=="v":
-                            if check<int(matriz[fila+1][columna]):
-                                checkMF=True
-                                errorv="mayor"
-                    valid=matriz3[fila-1][columna]
-                    if matriz[fila-1][columna]!="":
-                        if valid=="^":
-                            if check<int(matriz[fila-1][columna]):
-                                checkMC=True
-                                errorv="mayor"
-                        elif valid=="v":
-                            if check>int(matriz[fila-1][columna]):
-                                checkMF=True
-                                errorv="menor"
+                            elif valid=="v":
+                                if check<int(matriz[fila+1][columna]):
+                                    checkMF=True
+                                    errorv="mayor"
+                        valid=matriz3[fila-1][columna]
+                        if matriz[fila-1][columna]!="":
+                            if valid=="^":
+                                if check<int(matriz[fila-1][columna]):
+                                    checkMC=True
+                                    errorv="mayor"
+                            elif valid=="v":
+                                if check>int(matriz[fila-1][columna]):
+                                    checkMF=True
+                                    errorv="menor"
+                    ###########################
+                    #Validacion del resto del tablero
+                    else:
+                        valid=matriz2[fila][columna]
+                        if matriz[fila][columna+1]!="":
+                            if valid==">":
+                                if check<int(matriz[fila][columna+1]):
+                                    checkMF=True
+                                    errorv="mayor"
+                            elif valid=="<":
+                                if check>int(matriz[fila][columna+1]):
+                                    checkMF=True
+                                    errorv="menor"
+                        valid=matriz2[fila][columna-1]
+                        if matriz[fila][columna-1]!="":
+                            if valid==">":
+                                if check>int(matriz[fila][columna-1]):
+                                    checkMF=True
+                                    errorv="menor"
+                            elif valid=="<":
+                                if check<int(matriz[fila][columna-1]):
+                                    checkMF=True
+                                    errorv="mayor"
+                        valid=matriz3[fila][columna]
+                        if matriz[fila+1][columna]!="":
+                            if valid=="^":
+                                if check>int(matriz[fila+1][columna]):
+                                    checkMC=True
+                                    errorv="menor"
+                            elif valid=="v":
+                                if check<int(matriz[fila+1][columna]):
+                                    checkMF=True
+                                    errorv="mayor"
+                        valid=matriz3[fila-1][columna]
+                        if matriz[fila-1][columna]!="":
+                            if valid=="^":
+                                if check<int(matriz[fila-1][columna]):
+                                    checkMC=True
+                                    errorv="mayor"
+                            elif valid=="v":
+                                if check>int(matriz[fila-1][columna]):
+                                    checkMF=True
+                                    errorv="menor"
+                    if repeatF==False and repeatC==False and checkMF==False and checkMC==False and opcion=="Analizar":
+                        print(repeatF,repeatC,checkMF,checkMC)
+                        availableP=availableP+[check]
                 ###########################
                 #Checkeo de validaciones para poner la opcion en el tablero
-                if repeatF==True:
-                    messagebox.showinfo("Alto", "Ese valor ya se\nencuentra en la fila")
-                elif repeatC==True:
-                    messagebox.showinfo("Alto", "Ese valor ya se\nencuentra en la columna")
-                elif checkMF==True or checkMC==True:
-                    if errorv=="mayor":
-                        messagebox.showinfo("Alto", "Ese valor no cumple\ncon la restriccion mayor")
+                if opcion=="Analizar":
+                    if availableP==[]:
+                        messagebox.showinfo("Jugadas Disponibles", "No hay jugadas disponibles para esta casilla")
                     else:
-                        messagebox.showinfo("Alto", "Ese valor no cumple\ncon la restriccion menor")
-                else:
-                    matriz[fila][columna]=str(opcion)
-                    boton.configure(text=opcion)
-                    jugadas=[(fila,columna)]+jugadas
-                    vacio=False
-                    for i in range(len(matriz)):
-                        for f in range(len(matriz)):
-                            if matriz[i][f]=="":
-                                vacio=True
-                    if vacio==False:
-                        win=True
-                    if win==True:
-                        if d2=="Multi Nivel":
-                            if d=="Dificil":
-                                terminado()
+                        string=""
+                        for i in availableP:
+                            if string=="":
+                                string=string+str(i)
                             else:
-                                nextLevel()
+                                string=string+", "+str(i)
+                        string="Posibles Jugadas: "+string
+                        messagebox.showinfo("Jugadas Disponibles", string)
+                else:
+                    if repeatF==True:
+                        messagebox.showinfo("Alto", "Ese valor ya se\nencuentra en la fila")
+                    elif repeatC==True:
+                        messagebox.showinfo("Alto", "Ese valor ya se\nencuentra en la columna")
+                    elif checkMF==True or checkMC==True:
+                        if errorv=="mayor":
+                            messagebox.showinfo("Alto", "Ese valor no cumple\ncon la restriccion mayor")
                         else:
-                            terminado()
+                            messagebox.showinfo("Alto", "Ese valor no cumple\ncon la restriccion menor")
+                    else:
+                        matriz[fila][columna]=str(opcion)
+                        boton.configure(text=opcion)
+                        jugadas=[(fila,columna)]+jugadas
+                        vacio=False
+                        for i in range(len(matriz)):
+                            for f in range(len(matriz)):
+                                if matriz[i][f]=="":
+                                    vacio=True
+                        if vacio==False:
+                            win=True
+                        if win==True:
+                            if d2=="Multi Nivel":
+                                if d=="Dificil":
+                                    terminado()
+                                else:
+                                    nextLevel()
+                            else:
+                                terminado()
     ###########################
     #Creacion de botones
     fila=268
