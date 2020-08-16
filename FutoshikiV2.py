@@ -25,6 +25,9 @@ hours=0
 s2=0
 m2=0
 h2=0
+m3=0
+s3=0
+h3=0
 opcion=""
 ini=False
 cargada=False
@@ -271,6 +274,9 @@ def juego():
     global s2
     global m2
     global h2
+    global s3
+    global m3
+    global h3
     difficulties=[]
     futo=Tk()
     futo.geometry("1000x800")
@@ -428,6 +434,24 @@ def juego():
         global top
         global opcion
         top=True
+        if d2=="Multi Nivel":
+            strSec=str(s3)
+            strMin=str(m3)
+            strHour=str(h3)
+            if s3<10:
+                strSec="0"+str(s3)
+            if m3<10:
+                strMin="0"+str(m3)
+            if h3<10:
+                strHour="0"+str(h3)
+            tiempo=strHour+":"+strMin+":"+strSec
+            stringToop=str(nombre)+";"+tiempo+";"+str(d)
+            file=open("futoshiki2020top10.dat","a")
+            file.write(stringToop)
+            file.write("\n")
+            file.close
+            file=open("futoshiki2020top10.dat","a")
+            file.close
         if r=="Si":
             if seconds<10:
                 strS="0"+str(seconds)
@@ -442,7 +466,10 @@ def juego():
             else:
                 strH=str(hours)
             strTiempo=strH+":"+strM+":"+strS
-            string=str(nombre)+";"+strTiempo+";"+str(d)
+            if d2=="Multi Nivel":
+                string=str(nombre)+";"+strTiempo+";"+str(d2)
+            else:
+                string=str(nombre)+";"+strTiempo+";"+str(d)
             file=open("futoshiki2020top10.dat","a")
             file.write(string)
             file.write("\n")
@@ -499,11 +526,34 @@ def juego():
     #Funcionalidad: cargar la siguiente dificultad
     def nextLevel():
         global d
+        global s3
+        global m3
+        global h3
         string="Nivel "+d+" completado\nEmpezando siguiente nivel"
+        strSec=str(s3)
+        strMin=str(m3)
+        strHour=str(h3)
+        if s3<10:
+            strSec="0"+str(s3)
+        if m3<10:
+            strMin="0"+str(m3)
+        if h3<10:
+            strHour="0"+str(h3)
+        tiempo=strHour+":"+strMin+":"+strSec
+        stringToop=str(nombre)+";"+tiempo+";"+str(d)
+        file=open("futoshiki2020top10.dat","a")
+        file.write(stringToop)
+        file.write("\n")
+        file.close
+        file=open("futoshiki2020top10.dat","a")
+        file.close
         if d=="Facil":
             d="Normal"
         else:
             d="Dificil"
+        s3=0
+        m3=0
+        h3=0
         futo.destroy()
         messagebox.showinfo("Felicidades", string)
         juego()
@@ -515,12 +565,18 @@ def juego():
         global mins
         global hours
         global top
+        global s3
+        global m3
+        global h3
         if top==True:
             pass
         else:
+            s3=s3+1
+            m3=m3+(s3//60)
+            h3=h3+(m3//60)
             seconds=seconds+1
-            mins=mins+seconds//60
-            hours=hours+mins//60
+            mins=mins+(seconds//60)
+            hours=hours+(mins//60)
             m=str(mins)
             h=str(hours)
             if hours<10:
@@ -528,13 +584,14 @@ def juego():
             if mins<10:
                 m="0"+str(mins)
             if seconds==60:
+                s3=0
                 seconds=0
             se=seconds
             s=str(se)
             if se<10:
                 s="0"+str(se)
             if win==True:
-                terminado()
+                pass
             else:
                 time=h+":"+m+":"+s
                 timer_display.config(text=time)
@@ -547,6 +604,10 @@ def juego():
         global mins
         global hours
         global top
+        global r
+        global s3
+        global m3
+        global h3
         #Funcionalidad: continuar la partida en caso de que no quiera
         #terminarla cuando el tiempo se acaba
         def timerN():
@@ -556,9 +617,11 @@ def juego():
             global m2
             global s2
             global h2
+            global r
             hours=h2
             mins=m2
             seconds=s2
+            r="Si"
             timerT.destroy()
             reloj()
         #Funcionalidad: cerrar la partida en caso de que quiera
@@ -576,26 +639,30 @@ def juego():
         if top==True:
             pass
         else:
-            seconds = seconds - 1
+            s3=s3+1
+            m3=m3+(s3//60)
+            h3=h3+(m3//60)
+            seconds=seconds-1
             if seconds==-1:
+                s3=0
                 seconds=59
                 mins=mins-1
                 if hours>0 and mins==-1:
                     mins=59
                     hours=hours-1
-            s = str(seconds)
-            m = str(mins)
-            h = str(hours)
-            if hours < 10:
-                h = "0" + str(hours)
-            if mins < 10:
-                m = "0" + str(mins)
-            if seconds < 10:
-                s = "0" + str(seconds)
+            s=str(seconds)
+            m=str(mins)
+            h=str(hours)
+            if hours<10:
+                h="0"+str(hours)
+            if mins<10:
+                m="0"+str(mins)
+            if seconds<10:
+                s="0"+str(seconds)
             time=h+":"+m+":"+s
             timer_display.config(text=time)
             if win==True:
-                terminado()
+                pass
             else:
                 if hours==0 and mins==0 and seconds==0:
                     messagebox.showinfo("STOP", "El tiempo se ha acabado\nfin de la partida?")
@@ -833,11 +900,15 @@ def juego():
     ###########################
     #Funcionalidad: terminar la partida por completo
     def finishG():
+        global d2
+        global d
         #Funcionalidad: cerrar la ventana de opcion y no terminar el juego actual
         def finishGN():
             finish.destroy()
         #Funcionalidad: cerrar la ventana de opcion y terminar el juego actual
         def finishGS():
+            global d2
+            global d
             global lvl
             if lvl==0:
                 lvl=random.choice([1,2])
@@ -847,6 +918,8 @@ def juego():
                 lvl=random.choice([0,1])
             finish.destroy()
             futo.destroy()
+            if d2=="Multi Nivel":
+                d="Facil"
             juego()
         finish=Tk()
         finish.geometry("300x300")
@@ -867,6 +940,7 @@ def juego():
         result=[]
         for i in range(len(l)):
             tiemp=list(l[i])
+            print(tiemp)
             if tiemp[0]=="0":
                 suma=suma+((int(tiemp[1]))*100)
             else:
@@ -1431,7 +1505,6 @@ def juego():
                                     checkMF=True
                                     errorv="menor"
                     if repeatF==False and repeatC==False and checkMF==False and checkMC==False and opcion=="Analizar":
-                        print(repeatF,repeatC,checkMF,checkMC)
                         availableP=availableP+[check]
                 ###########################
                 #Checkeo de validaciones para poner la opcion en el tablero
