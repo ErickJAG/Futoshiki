@@ -45,7 +45,7 @@ def salga():
     inicio.destroy()
 #Funcionalidad: abrir el PDF con el manual
 def helps():
-    os.system("manual_de_usuario_futoshiki.PDF")
+    os.system("manual_de_usuario_futoshiki_V2.PDF")
 #Funcionalidad: abrir una ventana on la info del programa
 def abouts():
     messagebox.showinfo("Acerca del programa", "Nombre de programa: FutoshikiV2\nVersion: 3.7.3\nAutor: Erick Astorga Gamboa")
@@ -194,6 +194,7 @@ def confi():
     configuracion.mainloop()
 conf=Button(inicio,text="Configuracion",background="green",activebackground="green",relief=GROOVE,font=("Trebuchet MS", 17, "bold"),command=lambda: confi())
 conf.place(x=60, y=110)
+###########################
 #No posee entradas especificas
 #Salida: tablero de juego
 #Funcionalidad: crear el tablero de juego
@@ -207,7 +208,320 @@ def juego():
     win=False
     ini=False
     ###########################
-    #Funcionalidad: definir la variable opcion dependiendo del panel elegido
+    if cargada==False:
+        matriz=[["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]]
+        matriz2=[["","","",""],["","","",""],["","","",""],["","","",""],["","","",""]]
+        matriz3=[["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]]
+    global r
+    global p
+    global d
+    global d2
+    global seconds
+    global mins
+    global hours
+    global nombre
+    global jugadas
+    global borradas
+    global lvl
+    global s2
+    global m2
+    global h2
+    global s3
+    global m3
+    global h3
+    difficulties=[]
+    futo=Tk()
+    futo.geometry("1000x800")
+    futo.resizable(0, 0)
+    futo.title("FutoshikiV2")
+    futo.iconbitmap("Metaverse.ico")
+    futo.configure(bg="black")
+    level=[0,1,2]
+    if lvl=="":
+        lvl=random.choice(level)
+    file=open("futoshiki2020partidas.dat","r")
+    contenido=file.readlines()
+    for i in range (0,len(contenido),1):
+        dato=contenido[i].find(";")
+        valor=(contenido[i][0:dato])
+        difficulties+=[valor]
+    file.close
+    listaEasy=ast.literal_eval(difficulties[0])
+    listaNormal=ast.literal_eval(difficulties[1])
+    listaHard=ast.literal_eval(difficulties[2])
+    ###########################
+    #Funcionalidad: iniciar el comando de auto completar la partida
+    def completarP():
+        global jugadas
+        global matriz
+        global top
+        global d2
+        top=True
+        borrar.configure(state="disabled")
+        redo.configure(state="disabled")
+        terminar.configure(state="disabled")
+        erase.configure(state="disabled")
+        topTen.configure(state="disabled")
+        guardar.configure(state="disabled")
+        complete.configure(state="disabled")
+        panel1.configure(state="disabled",bg="white")
+        panel2.configure(state="disabled",bg="white")
+        panel3.configure(state="disabled",bg="white")
+        panel4.configure(state="disabled",bg="white")
+        panel5.configure(state="disabled",bg="white")
+        analizar.configure(state="disabled",bg="white")
+        opcion=""
+        if jugadas==[]:
+            pass
+        else:
+            while jugadas!=[]:
+                fila=int(jugadas[0][0])
+                columna=int(jugadas[0][1])
+                matriz[fila][columna]=""
+                for i in range(len(matriz)):
+                    for f in range(len(matriz)):
+                        boton=listaB[i][f]
+                        boton.configure(text=matriz[f][i])
+                jugadas=jugadas[1:]
+        if resuelva()==True:
+            for i in range(len(matriz)):
+                for f in range(len(matriz)):
+                    boton=listaB[i][f]
+                    boton.configure(text=matriz[f][i])
+            if d2=="Multi Nivel":
+                messagebox.showinfo("Listo", "La partida se ha resuelto, pero\nla dificultad es multi nivel\n\nEsta dificultad funciona como un reto,\nsi la quiere jugar por favor cierre la\npartida y vuelva a empezar")
+            else:    
+                messagebox.showinfo("Listo", "La partida se ha resuelto\nSi quiere volver a jugar\ncierre el juego y vuelva a empezar")
+            top=False
+    ###########################
+    #Funcionalidad: completar la partida del tablero actual
+    def resuelva():
+        global matriz
+        find=vacio(matriz)
+        if find==None:
+            return True
+        else:
+            fila=find[0]
+            column=find[1]
+        for i in range(1,6):
+            if validar(matriz,i,fila,column)==True:
+                matriz[fila][column]=i
+                if resuelva():
+                    return True
+                matriz[fila][column]=''
+        return False
+    ###########################
+    #Funcionalidad: validar que la jugada es valida, esta funciona
+    #como ayuda de la funcion resuelva
+    def validar(tablero,num,fila,columna):
+        global matriz2
+        global matriz3
+        check=num
+        for c in range(len(tablero)):
+            if c==columna:
+                pass
+            elif str(tablero[fila][c])==str(check):
+                return False
+        for f in range(len(tablero)):
+            if f==fila:
+                pass
+            elif str(tablero[f][columna])==str(check):
+                return False
+        ###########################
+        #Validaciones de las esquinas
+        if fila==0 and columna==0:
+            valid=matriz2[0][0]
+            if tablero[0][1]!="":
+                if valid==">":
+                    if check<int(tablero[0][1]):
+                        return False
+                elif valid=="<":
+                    if check>int(tablero[0][1]):
+                        return False
+            valid=matriz3[0][0]
+            if tablero[1][0]!="":
+                if valid=="^":
+                    if check>int(tablero[1][0]):
+                        return False
+                elif valid=="v":
+                    if check<int(tablero[1][0]):
+                        return False
+        ###########################
+        elif fila==0 and columna==4:
+            valid=matriz2[0][3]
+            if tablero[0][3]!="":
+                if valid==">":
+                    if check>int(tablero[0][3]):
+                        return False
+                elif valid=="<":
+                    if check<int(tablero[0][3]):
+                        return False
+            valid=matriz3[0][4]
+            if tablero[1][4]!="":
+                if valid=="^":
+                    if check>int(tablero[1][4]):
+                        return False
+                elif valid=="v":
+                    if check<int(tablero[1][4]):
+                        return False
+        ###########################
+        elif fila==4 and columna==0:
+            valid=matriz2[4][0]
+            if tablero[4][1]!="":
+                if valid==">":
+                    if check<int(tablero[4][1]):
+                        return False
+                elif valid=="<":
+                    if check>int(tablero[4][1]):
+                        return False
+            valid=matriz3[3][0]
+            if tablero[3][0]!="":
+                if valid=="^":
+                    if check<int(tablero[3][0]):
+                        return False
+                elif valid=="v":
+                    if check>int(tablero[3][0]):
+                        return False
+        ###########################
+        elif fila==4 and columna==4:
+            valid=matriz2[4][3]
+            if tablero[4][3]!="":
+                if valid==">":
+                    if check>int(tablero[4][3]):
+                        return False
+                elif valid=="<":
+                    if check<int(tablero[4][3]):
+                        return False
+            valid=matriz3[3][4]
+            if tablero[3][4]!="":
+                if valid=="^":
+                    if check<int(tablero[3][4]):
+                        return False
+                elif valid=="v":
+                    if check>int(tablero[3][4]):
+                        return False
+        ###########################
+        #Validaciones de la primera y ultima fila
+        elif fila==0 or fila==4:
+            valid=matriz2[fila][columna]
+            if tablero[fila][columna+1]!="":
+                if valid==">":
+                    if check<int(tablero[fila][columna+1]):
+                        return False
+                elif valid=="<":
+                    if check>int(tablero[fila][columna+1]):
+                        return False
+            valid=matriz2[fila][columna-1]
+            if tablero[fila][columna-1]!="":
+                if valid==">":
+                    if check>int(tablero[fila][columna-1]):
+                        return False
+                elif valid=="<":
+                    if check<int(tablero[fila][columna-1]):
+                        return False
+            if fila==0:
+                valid=matriz3[fila][columna]
+                if tablero[fila+1][columna]!="":
+                    if valid=="^":
+                        if check>int(tablero[fila+1][columna]):
+                            return False
+                    elif valid=="v":
+                        if check<int(tablero[fila+1][columna]):
+                            return False
+            else:
+                valid=matriz3[fila-1][columna]
+                if tablero[fila-1][columna]!="":
+                    if valid=="^":
+                        if check<int(tablero[fila-1][columna]):
+                            return False
+                    elif valid=="v":
+                        if check>int(tablero[fila-1][columna]):
+                            return False
+        ###########################
+        #Validacion de la primera y ultima columna
+        elif columna==0 or columna==4:
+            if columna==0:
+                valid=matriz2[fila][columna]
+                if tablero[fila][columna+1]!="":
+                    if valid==">":
+                        if check<int(tablero[fila][columna+1]):
+                            return False
+                    elif valid=="<":
+                        if check>int(tablero[fila][columna+1]):
+                            return False
+            else:
+                valid=matriz2[fila][columna-1]
+                if tablero[fila][columna-1]!="":
+                    if valid==">":
+                        if check>int(tablero[fila][columna-1]):
+                            return False
+                    elif valid=="<":
+                        if check<int(tablero[fila][columna-1]):
+                            return False
+            valid=matriz3[fila][columna]
+            if tablero[fila+1][columna]!="":
+                if valid=="^":
+                    if check>int(tablero[fila+1][columna]):
+                        return False
+                elif valid=="v":
+                    if check<int(tablero[fila+1][columna]):
+                        return False
+            valid=matriz3[fila-1][columna]
+            if tablero[fila-1][columna]!="":
+                if valid=="^":
+                    if check<int(tablero[fila-1][columna]):
+                        return False
+                elif valid=="v":
+                    if check>int(tablero[fila-1][columna]):
+                        return False
+        ###########################
+        #Validacion del resto del tablero
+        else:
+            valid=matriz2[fila][columna]
+            if tablero[fila][columna+1]!="":
+                if valid==">":
+                    if check<int(tablero[fila][columna+1]):
+                        return False
+                elif valid=="<":
+                    if check>int(tablero[fila][columna+1]):
+                        return False
+            valid=matriz2[fila][columna-1]
+            if tablero[fila][columna-1]!="":
+                if valid==">":
+                    if check>int(tablero[fila][columna-1]):
+                        return False
+                elif valid=="<":
+                    if check<int(tablero[fila][columna-1]):
+                        return False
+            valid=matriz3[fila][columna]
+            if tablero[fila+1][columna]!="":
+                if valid=="^":
+                    if check>int(tablero[fila+1][columna]):
+                        return False
+                elif valid=="v":
+                    if check<int(tablero[fila+1][columna]):
+                        return False
+            valid=matriz3[fila-1][columna]
+            if tablero[fila-1][columna]!="":
+                if valid=="^":
+                    if check<int(tablero[fila-1][columna]):
+                        return False
+                elif valid=="v":
+                    if check>int(tablero[fila-1][columna]):
+                        return False
+        return True
+    ###########################
+    #Funcionalidad: devolverle a la funcion resuelva las
+    #coordenadas de un espacio vacio de la matriz del tablero
+    def vacio(tablero):
+        for i in range(len(tablero)):
+            for f in range(len(tablero)):
+                if tablero[i][f]=='':
+                    result=(i,f)
+                    return result
+        return None
+    ###########################
+    #Funcionalidad: definir la opcion para poner en el tablero
     def elejirOp(op):
         global opcion
         global ini
@@ -255,48 +569,6 @@ def juego():
                 panel4.configure(bg="white")
                 panel5.configure(bg="white")
                 analizar.configure(bg="green")
-    ###########################
-    if cargada==False:
-        matriz=[["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]]
-        matriz2=[["","","",""],["","","",""],["","","",""],["","","",""],["","","",""]]
-        matriz3=[["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]]
-    global r
-    global p
-    global d
-    global d2
-    global seconds
-    global mins
-    global hours
-    global nombre
-    global jugadas
-    global borradas
-    global lvl
-    global s2
-    global m2
-    global h2
-    global s3
-    global m3
-    global h3
-    difficulties=[]
-    futo=Tk()
-    futo.geometry("1000x800")
-    futo.resizable(0, 0)
-    futo.title("FutoshikiV2")
-    futo.iconbitmap("Metaverse.ico")
-    futo.configure(bg="black")
-    level=[0,1,2]
-    if lvl=="":
-        lvl=random.choice(level)
-    file=open("futoshiki2020partidas.dat","r")
-    contenido=file.readlines()
-    for i in range (0,len(contenido),1):
-        dato=contenido[i].find(";")
-        valor=(contenido[i][0:dato])
-        difficulties+=[valor]
-    file.close
-    listaEasy=ast.literal_eval(difficulties[0])
-    listaNormal=ast.literal_eval(difficulties[1])
-    listaHard=ast.literal_eval(difficulties[2])
     ###########################
     #Creacion del reloj en caso de ser elegido
     if r=="Si":
@@ -516,6 +788,8 @@ def juego():
         panel3.configure(state="disabled",bg="white")
         panel4.configure(state="disabled",bg="white")
         panel5.configure(state="disabled",bg="white")
+        analizar.configure(state="disabled",bg="white")
+        complete.configure(state="disabled")
         opcion=""
         if d2=="Multi Nivel":
             messagebox.showinfo("Felicidades", "Ha terminado todas las dificultades")
@@ -708,8 +982,10 @@ def juego():
         global h2
         global nombre
         global d
+        global d2
         global r
         global p
+        global jugadas
         cargada=True
         file=open("futoshiki2020juegoactual.dat","r")
         contenido=file.readlines()
@@ -718,7 +994,6 @@ def juego():
             dato1=contenido[i].find(";")
             valor1=(contenido[i][0:dato1])
             if valor1=="NONE":
-                print(valor1)
                 messagebox.showinfo("STOP", "No hay partida para cargar")
                 i=len(contenido)
             else:
@@ -735,23 +1010,33 @@ def juego():
                     dato7=contenido[i].find(";",dato6+1)
                     dato8=contenido[i].find(";",dato7+1)
                     dato9=contenido[i].find(";",dato8+1)
+                    dato10=contenido[i].find(";",dato9+1)
                     valor6=(contenido[i][dato5+1:dato6])
                     valor7=(contenido[i][dato6+1:dato7])
                     valor8=(contenido[i][dato7+1:dato8])
                     valor9=(contenido[i][dato8+1:dato9])
-                    h2=valor6
-                    m2=valor7
-                    s2=valor8
+                    valor10=(contenido[i][dato9+1:dato10])
+                    h2=int(valor5)
+                    m2=int(valor6)
+                    s2=int(valor7)
                     matri=ast.literal_eval(valor8)
                     nombre=valor9
+                    jugadas=ast.literal_eval(valor10)
                 elif valor1=="Si":
                     dato6=contenido[i].find(";",dato5+1)
+                    dato7=contenido[i].find(";",dato6+1)
+                    dato7=contenido[i].find(";",dato6+1)
                     valor6=(contenido[i][dato5+1:dato6])
+                    valor7=(contenido[i][dato6+1:dato7])
                     matri=ast.literal_eval(valor5)
                     nombre=valor6
+                    jugadas=ast.literal_eval(valor7)
                 else:
+                    dato6=contenido[i].find(";",dato5+1)
+                    valor6=(contenido[i][dato5+1:dato6])
                     matri=ast.literal_eval(valor4)
                     nombre=valor5
+                    jugadas=ast.literal_eval(valor6)
                 r=valor1
                 d=valor2
                 p=valor3
@@ -773,11 +1058,12 @@ def juego():
         if valor1=="NONE":
             pass
         else:
+            d2=""
             futo.destroy()
             juego()
     ###########################
-    #Funcionalidad: verificar que las condiciones esten corretas para
-    #iniciar
+    #Funcionalidad: verificar que las condiciones esten
+    #correctas para iniciar
     def comenzar():
         global nombre
         global r
@@ -800,6 +1086,7 @@ def juego():
             erase.configure(state="normal")
             topTen.configure(state="normal")
             guardar.configure(state="normal")
+            complete.configure(state="normal")
             cargar.configure(state="disabled")
     if cargada==False:
         if d2=="Multi Nivel":
@@ -940,7 +1227,6 @@ def juego():
         result=[]
         for i in range(len(l)):
             tiemp=list(l[i])
-            print(tiemp)
             if tiemp[0]=="0":
                 suma=suma+((int(tiemp[1]))*100)
             else:
@@ -961,6 +1247,7 @@ def juego():
     def guardarP():
         global r
         global d
+        global d2
         global p
         global seconds
         global mins
@@ -972,42 +1259,46 @@ def juego():
         global matriz
         global matriz2
         global matriz3
-        if seconds<10:
-            strS="0"+str(seconds)
+        global jugadas
+        if d2=="Multi Nivel":
+            messagebox.showinfo("Alto", "La dificultad de Multi Nivel es\nun reto hecho para completar\nen una sesion")
         else:
-            strS=str(seconds)
-        if mins<10:
-            strM="0"+str(mins)
-        else:
-            strM=str(mins)
-        if hours<10:
-            strH="0"+str(hours)
-        else:
-            strH=str(hours)
-        cuadricula=[]
-        for i in range(len(matriz)):
-            for f in range(len(matriz)):
-                if matriz[i][f]!="":
-                    cuadricula=cuadricula+[(matriz[i][f],int(i),int(f))]
-                if matriz3[i][f]!="":
-                    cuadricula=cuadricula+[(matriz3[i][f],int(i),int(f))]
-        for i in range(len(matriz2)):
-            for f in range(len(matriz2[0])):
-                if matriz2[i][f]!="":
-                    cuadricula=cuadricula+[(matriz2[i][f],int(i),int(f))]
-                
-        strTiempo=strH+":"+strM+":"+strS
-        if r=="Si":
-            string=str(r)+";"+str(d)+";"+str(p)+";"+strTiempo+";"+str(cuadricula)+";"+str(nombre)
-        elif r=="No":
-            string=str(r)+";"+str(d)+";"+str(p)+";"+str(cuadricula)+";"+str(nombre)
-        else:
-            string=str(r)+";"+str(d)+";"+str(p)+";"+strTiempo+";"+str(h2)+";"+str(m2)+";"+str(s2)+";"+str(cuadricula)+";"+str(nombre)
-        file=open("futoshiki2020juegoactual.dat","w")
-        file.write(string)
-        file.close()
-        file=open("futoshiki2020juegoactual.dat","a")
-        file.close()
+            if seconds<10:
+                strS="0"+str(seconds)
+            else:
+                strS=str(seconds)
+            if mins<10:
+                strM="0"+str(mins)
+            else:
+                strM=str(mins)
+            if hours<10:
+                strH="0"+str(hours)
+            else:
+                strH=str(hours)
+            cuadricula=[]
+            for i in range(len(matriz)):
+                for f in range(len(matriz)):
+                    if matriz[i][f]!="":
+                        cuadricula=cuadricula+[(matriz[i][f],int(i),int(f))]
+                    if matriz3[i][f]!="":
+                        cuadricula=cuadricula+[(matriz3[i][f],int(i),int(f))]
+            for i in range(len(matriz2)):
+                for f in range(len(matriz2[0])):
+                    if matriz2[i][f]!="":
+                        cuadricula=cuadricula+[(matriz2[i][f],int(i),int(f))]
+                    
+            strTiempo=strH+":"+strM+":"+strS
+            if r=="Si":
+                string=str(r)+";"+str(d)+";"+str(p)+";"+strTiempo+";"+str(cuadricula)+";"+str(nombre)+";"+str(jugadas)+";"
+            elif r=="No":
+                string=str(r)+";"+str(d)+";"+str(p)+";"+str(cuadricula)+";"+str(nombre)+";"+str(jugadas)+";"
+            else:
+                string=str(r)+";"+str(d)+";"+str(p)+";"+strTiempo+";"+str(h2)+";"+str(m2)+";"+str(s2)+";"+str(cuadricula)+";"+str(nombre)+";"+str(jugadas)+";"
+            file=open("futoshiki2020juegoactual.dat","w")
+            file.write(string)
+            file.close()
+            file=open("futoshiki2020juegoactual.dat","a")
+            file.close()
     ###########################
     #Funcionalidad: ordenar los top jugadores de cada lista pra pasar
     #a desplegarlos
@@ -1232,6 +1523,8 @@ def juego():
     cargar.place(x=817,y=730)  
     start=Button(futo,height=2,width=10,text="Iniciar\nJuego",activebackground="magenta",bg="magenta",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: comenzar())
     start.place(x=230,y=700)
+    complete=Button(futo,state="disabled",height=2,width=10,text="Solucionar\nJuego",activebackground="red",bg="red",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: completarP())
+    complete.place(x=450,y=625)
     ###########################
     #Funcionalidad: verificar que la opcion que se quiere poner
     #en el tablero sea valida
