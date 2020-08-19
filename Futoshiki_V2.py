@@ -229,6 +229,8 @@ def juego():
     global s3
     global m3
     global h3
+    jugadas=[]
+    borradas=[]
     difficulties=[]
     futo=Tk()
     futo.geometry("1000x800")
@@ -269,7 +271,8 @@ def juego():
         panel3.configure(state="disabled",bg="white")
         panel4.configure(state="disabled",bg="white")
         panel5.configure(state="disabled",bg="white")
-        analizar.configure(state="disabled",bg="white")
+        analizar.configure(state="disabled",bg="turquoise")
+        borrarE.configure(state="disabled",bg="light blue")
         opcion=""
         if jugadas==[]:
             pass
@@ -528,47 +531,61 @@ def juego():
         if ini==True:
             opcion=op
             if op==panel1["text"]:
-                panel1.configure(bg="green")
+                panel1.configure(bg="blue")
                 panel2.configure(bg="white")
                 panel3.configure(bg="white")
                 panel4.configure(bg="white")
                 panel5.configure(bg="white")
-                analizar.configure(bg="white")
+                analizar.configure(bg="turquoise")
+                borrarE.configure(bg="light blue")
             elif op==panel2["text"]:
                 panel1.configure(bg="white")
-                panel2.configure(bg="green")
+                panel2.configure(bg="blue")
                 panel3.configure(bg="white")
                 panel4.configure(bg="white")
                 panel5.configure(bg="white")
-                analizar.configure(bg="white")
+                analizar.configure(bg="turquoise")
+                borrarE.configure(bg="light blue")
             elif op==panel3["text"]:
                 panel1.configure(bg="white")
                 panel2.configure(bg="white")
-                panel3.configure(bg="green")
+                panel3.configure(bg="blue")
                 panel4.configure(bg="white")
                 panel5.configure(bg="white")
-                analizar.configure(bg="white")
+                analizar.configure(bg="turquoise")
+                borrarE.configure(bg="light blue")
             elif op==panel4["text"]:
                 panel1.configure(bg="white")
                 panel2.configure(bg="white")
                 panel3.configure(bg="white")
-                panel4.configure(bg="green")
+                panel4.configure(bg="blue")
                 panel5.configure(bg="white")
-                analizar.configure(bg="white")
+                analizar.configure(bg="turquoise")
+                borrarE.configure(bg="light blue")
             elif op==panel5["text"]:
                 panel1.configure(bg="white")
                 panel2.configure(bg="white")
                 panel3.configure(bg="white")
                 panel4.configure(bg="white")
-                panel5.configure(bg="green")
-                analizar.configure(bg="white")
+                panel5.configure(bg="blue")
+                analizar.configure(bg="turquoise")
+                borrarE.configure(bg="light blue")
+            elif op==borrarE["text"]:
+                panel1.configure(bg="white")
+                panel2.configure(bg="white")
+                panel3.configure(bg="white")
+                panel4.configure(bg="white")
+                panel5.configure(bg="white")
+                analizar.configure(bg="turquoise")
+                borrarE.configure(bg="blue")
             else:
                 panel1.configure(bg="white")
                 panel2.configure(bg="white")
                 panel3.configure(bg="white")
                 panel4.configure(bg="white")
                 panel5.configure(bg="white")
-                analizar.configure(bg="green")
+                analizar.configure(bg="blue")
+                borrarE.configure(bg="light blue")
     ###########################
     #Creacion del reloj en caso de ser elegido
     if r=="Si":
@@ -652,43 +669,37 @@ def juego():
     ###########################
     #Creacion del panel de digitos
     if p=="Izquierda":
-        panel1=Button(futo,height=2,width=6,text="1",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+        panel1=Button(futo,height=2,width=6,text="1",activebackground="blue",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel1.configure(command=lambda: elejirOp(panel1["text"]))
-        panel1.place(x=100,y=70)
-        panel2=Button(futo,height=2,width=6,text="2",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+        panel1.place(x=100,y=100)
+        panel2=Button(futo,height=2,width=6,text="2",activebackground="blue",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel2.configure(command=lambda: elejirOp(panel2["text"]))
-        panel2.place(x=100,y=170)
-        panel3=Button(futo,height=2,width=6,text="3",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+        panel2.place(x=100,y=200)
+        panel3=Button(futo,height=2,width=6,text="3",activebackground="blue",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel3.configure(command=lambda: elejirOp(panel3["text"]))
-        panel3.place(x=100,y=270)
-        panel4=Button(futo,height=2,width=6,text="4",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+        panel3.place(x=100,y=300)
+        panel4=Button(futo,height=2,width=6,text="4",activebackground="blue",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel4.configure(command=lambda: elejirOp(panel4["text"]))
-        panel4.place(x=100,y=370)
-        panel5=Button(futo,height=2,width=6,text="5",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+        panel4.place(x=100,y=400)
+        panel5=Button(futo,height=2,width=6,text="5",activebackground="blue",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel5.configure(command=lambda: elejirOp(panel5["text"]))
-        panel5.place(x=100,y=470)
-        analizar=Button(futo,height=2,width=6,text="Analizar",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
-        analizar.configure(command=lambda: elejirOp(analizar["text"]))
-        analizar.place(x=100,y=570)
+        panel5.place(x=100,y=500)
     else:
-        panel1=Button(futo,height=2,width=6,text="1",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+        panel1=Button(futo,height=2,width=6,text="1",activebackground="blue",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel1.configure(command=lambda: elejirOp(panel1["text"]))
-        panel1.place(x=830,y=70)
-        panel2=Button(futo,height=2,width=6,text="2",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+        panel1.place(x=830,y=100)
+        panel2=Button(futo,height=2,width=6,text="2",activebackground="blue",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel2.configure(command=lambda: elejirOp(panel2["text"]))
-        panel2.place(x=830,y=170)
-        panel3=Button(futo,height=2,width=6,text="3",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+        panel2.place(x=830,y=200)
+        panel3=Button(futo,height=2,width=6,text="3",activebackground="blue",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel3.configure(command=lambda: elejirOp(panel3["text"]))
-        panel3.place(x=830,y=270)
-        panel4=Button(futo,height=2,width=6,text="4",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+        panel3.place(x=830,y=300)
+        panel4=Button(futo,height=2,width=6,text="4",activebackground="blue",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel4.configure(command=lambda: elejirOp(panel4["text"]))
-        panel4.place(x=830,y=370)
-        panel5=Button(futo,height=2,width=6,text="5",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+        panel4.place(x=830,y=400)
+        panel5=Button(futo,height=2,width=6,text="5",activebackground="blue",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
         panel5.configure(command=lambda: elejirOp(panel5["text"]))
-        panel5.place(x=830,y=470)
-        analizar=Button(futo,height=2,width=6,text="Analizar",activebackground="green",bg="white",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
-        analizar.configure(command=lambda: elejirOp(analizar["text"]))
-        analizar.place(x=830,y=570)
+        panel5.place(x=830,y=500)
     ###########################
     #Funcionalidad: registrar la partida en caso de que se complete
     #con exito
@@ -788,7 +799,8 @@ def juego():
         panel3.configure(state="disabled",bg="white")
         panel4.configure(state="disabled",bg="white")
         panel5.configure(state="disabled",bg="white")
-        analizar.configure(state="disabled",bg="white")
+        analizar.configure(state="disabled",bg="turquoise")
+        borrarE.configure(state="disabled",bg="light blue")
         complete.configure(state="disabled")
         opcion=""
         if d2=="Multi Nivel":
@@ -1087,6 +1099,8 @@ def juego():
             topTen.configure(state="normal")
             guardar.configure(state="normal")
             complete.configure(state="normal")
+            analizar.configure(state="normal")
+            borrarE.configure(state="normal")
             cargar.configure(state="disabled")
     if cargada==False:
         if d2=="Multi Nivel":
@@ -1507,7 +1521,13 @@ def juego():
         Label(futo,text=str(d2)+" "+str(d),bg="red",relief=RAISED,font=("Trebuchet MS", 15, "bold italic")).place(x=620,y=25)
     else:
         Label(futo,text=str(d),bg="red",relief=RAISED,font=("Trebuchet MS", 15, "bold italic")).place(x=620,y=25)
-    borrar=Button(futo,state="disabled",height=2,width=10,text="Borrar\nJugada",activebackground="turquoise",bg="turquoise",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: borrarJ())
+    analizar=Button(futo,state="disabled",height=2,width=10,text="Analizar",activebackground="blue",bg="turquoise",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+    analizar.configure(command=lambda: elejirOp(analizar["text"]))
+    analizar.place(x=340,y=625)
+    borrarE=Button(futo,state="disabled",height=2,width=10,text="Borrar",activebackground="blue",bg="light blue",relief=RAISED,font=("Trebuchet MS", 12, "bold"))
+    borrarE.configure(command=lambda: elejirOp(borrarE["text"]))
+    borrarE.place(x=560,y=625)
+    borrar=Button(futo,state="disabled",height=2,width=10,text="Borrar\nUltima",activebackground="turquoise",bg="turquoise",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: borrarJ())
     borrar.place(x=340,y=700)
     redo=Button(futo,state="disabled",height=2,width=10,text="Rehacer\nJugada",activebackground="green",bg="green",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: rehacerJ())
     redo.place(x=450,y=700)
@@ -1523,7 +1543,7 @@ def juego():
     cargar.place(x=817,y=730)  
     start=Button(futo,height=2,width=10,text="Iniciar\nJuego",activebackground="magenta",bg="magenta",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: comenzar())
     start.place(x=230,y=700)
-    complete=Button(futo,state="disabled",height=2,width=10,text="Solucionar\nJuego",activebackground="red",bg="red",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: completarP())
+    complete=Button(futo,state="disabled",height=2,width=10,text="Solucionar\nJuego",activebackground="green",bg="green",relief=RAISED,font=("Trebuchet MS", 12, "bold"),command=lambda: completarP())
     complete.place(x=450,y=625)
     ###########################
     #Funcionalidad: verificar que la opcion que se quiere poner
@@ -1532,6 +1552,7 @@ def juego():
         global win
         global opcion
         global jugadas
+        global borradas
         global matriz
         global matriz2
         global matriz3
@@ -1541,6 +1562,31 @@ def juego():
         availableP=[]
         if opcion=="":
             pass
+        elif opcion=="Borrar":
+            for i in range(len(matriz)):
+                for f in range(len(matriz[i])):
+                    if boton==listaB[i][f]:
+                        columna=i
+                        fila=f
+            check=(fila,columna)
+            borrado=False
+            if jugadas==[]:
+                pass
+            else:
+                for j in range(len(jugadas)):
+                    if jugadas[j]==check:
+                        borradas=[(fila,columna,matriz[fila][columna])]+borradas
+                        matriz[fila][columna]=""
+                        boton.configure(text="")
+                        pos=j
+                        borrado=True
+                del jugadas[pos]
+
+            if borrado==False:
+                if boton["text"]!="":
+                    messagebox.showinfo("Alto", "No puede borrar\nvalores fijos.")
+                else:
+                    pass
         else:
             if opcion=="Analizar":
                 options=[1,2,3,4,5]
